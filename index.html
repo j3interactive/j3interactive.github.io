@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>J3 Interactive</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="J3 Interactive is an independent game studio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: arcade-cabinet glow — one huge chromatic-split wordmark, then stacked full-width bands with a single centered column inside */
+:root {
+  --ink: #0c0a17;        /* page ground: blue-violet black */
+  --panel: #161328;      /* raised surfaces */
+  --line: #2b2647;       /* hairlines */
+  --text: #ece9f7;
+  --muted: #a39dbf;
+  --cyan: #2de2e6;       /* chromatic pair: cyan + magenta */
+  --magenta: #ff2e88;
+  --amber: #ffc94a;      /* status highlight only */
+  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body: "Barlow", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --wrap: 1120px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font: 400 17px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ink);
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 2px; }
+
+.band { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: var(--wrap); margin: 0 auto; }
+
+/* ---------- Header ---------- */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9;
+  background: color-mix(in srgb, var(--ink) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.logo { font: 900 26px/1 var(--display); letter-spacing: .02em; text-decoration: none; display: flex; align-items: baseline; gap: 8px; }
+.logo b { color: var(--text); text-shadow: -2px 0 var(--magenta), 2px 0 var(--cyan); }
+.logo span { font: 600 11px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+nav { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+nav a {
+  font: 600 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  text-decoration: none; color: var(--muted); padding: 10px 12px; border-radius: 4px;
+}
+nav a:hover { color: var(--text); background: var(--panel); }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; overflow: hidden; }
+.hero::after { /* scanlines */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(255,255,255,.035) 0 1px, transparent 1px 4px);
+}
+.hero .glow {
+  position: absolute; inset: -20% -10% auto; height: 120%; pointer-events: none;
+  background:
+    radial-gradient(40% 50% at 22% 40%, color-mix(in srgb, var(--magenta) 28%, transparent), transparent 70%),
+    radial-gradient(40% 50% at 78% 30%, color-mix(in srgb, var(--cyan) 22%, transparent), transparent 70%);
+}
+.hero .wrap { position: relative; z-index: 1; padding-block: clamp(56px, 10vw, 120px) clamp(48px, 8vw, 96px); }
+.eyebrow { font: 600 12px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--cyan); }
+.mark {
+  font: 900 clamp(120px, 30vw, 340px)/.8 var(--display);
+  letter-spacing: -.02em; margin: 18px 0 0; color: var(--text);
+  text-shadow: -.035em 0 var(--magenta), .035em 0 var(--cyan);
+  animation: split 1.4s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes split {
+  0% { text-shadow: 0 0 var(--magenta), 0 0 var(--cyan); }
+  12% { text-shadow: -.09em .02em var(--magenta), .09em -.02em var(--cyan); }
+  100% { text-shadow: -.035em 0 var(--magenta), .035em 0 var(--cyan); }
+}
+.word { font: 700 clamp(28px, 5vw, 52px)/1 var(--display); letter-spacing: .32em; text-transform: uppercase; margin: 14px 0 0; }
+.lede { max-width: 34em; color: var(--muted); font-size: clamp(17px, 2vw, 20px); margin: 26px 0 0; }
+.ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.btn {
+  font: 600 13px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+  padding: 16px 22px; border-radius: 4px; border: 1px solid var(--line); background: var(--panel);
+  transition: transform .15s ease, border-color .15s ease;
+}
+.btn:hover { transform: translateY(-2px); border-color: var(--muted); }
+.btn.primary { background: var(--magenta); border-color: var(--magenta); color: #fff; box-shadow: 4px 4px 0 var(--cyan); }
+.btn.primary:hover { box-shadow: 6px 6px 0 var(--cyan); }
+
+/* ---------- Sections ---------- */
+section.block .wrap { padding-block: clamp(56px, 8vw, 96px); }
+section.block + section.block { border-top: 1px solid var(--line); }
+.sec-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
+h2 { font: 900 clamp(44px, 7vw, 80px)/.9 var(--display); text-transform: uppercase; margin: 10px 0 0; text-wrap: balance; }
+.sec-head p { color: var(--muted); max-width: 30em; margin: 0; }
+
+/* Featured game */
+.feature {
+  display: grid; grid-template-columns: 1.3fr 1fr; gap: 0;
+  border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--panel);
+  margin-bottom: 24px;
+}
+.feature .art { min-height: 340px; }
+.feature .info { padding: clamp(24px, 4vw, 40px); display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.feature h3 { font: 900 clamp(36px, 5vw, 56px)/.95 var(--display); text-transform: uppercase; margin: 0; }
+.feature p { color: var(--muted); margin: 0; }
+
+/* Cover art, drawn in CSS so the page ships with no image files */
+.art { position: relative; overflow: hidden; }
+.art::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+.art-ember {
+  background:
+    radial-gradient(circle at 70% 75%, #ffb347 0 6%, transparent 7%),
+    radial-gradient(60% 45% at 50% 100%, #ff2e88, transparent 70%),
+    linear-gradient(170deg, #1b1240 0%, #4a1450 55%, #ff6a3d 100%);
+}
+.art-ember::before {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 38%;
+  background: linear-gradient(to top, #0c0a17, transparent),
+    repeating-linear-gradient(90deg, transparent 0 46px, rgba(45,226,230,.35) 46px 47px);
+  transform: perspective(240px) rotateX(55deg); transform-origin: bottom;
+}
+.art-drift {
+  background:
+    linear-gradient(115deg, transparent 40%, rgba(45,226,230,.8) 40% 42%, transparent 42% 52%, rgba(255,46,136,.8) 52% 53%, transparent 53%),
+    radial-gradient(70% 60% at 30% 30%, #13406b, transparent),
+    linear-gradient(160deg, #0a1a33, #0c0a17);
+}
+.art-block {
+  background-color: #1a1530;
+  background-image:
+    linear-gradient(var(--amber), var(--amber)), linear-gradient(var(--cyan), var(--cyan)),
+    linear-gradient(var(--magenta), var(--magenta)), linear-gradient(#5b4bd6, #5b4bd6);
+  background-size: 22% 22%, 22% 22%, 22% 22%, 22% 22%;
+  background-position: 25% 70%, 47% 70%, 47% 48%, 69% 70%;
+  background-repeat: no-repeat;
+}
+
+.status { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  font: 600 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  padding: 7px 9px; border-radius: 3px; border: 1px solid var(--line); color: var(--muted);
+}
+.chip.live { color: var(--ink); background: var(--cyan); border-color: var(--cyan); }
+.chip.dev { color: var(--ink); background: var(--amber); border-color: var(--amber); }
+.specs { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 4px 0 0; font: 400 13px/1.5 var(--mono); }
+.specs dt { color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+.specs dd { margin: 0; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.card { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--panel); display: flex; flex-direction: column; transition: transform .2s ease, border-color .2s ease; }
+.card:hover { transform: translateY(-4px); border-color: var(--muted); }
+.card .art { aspect-ratio: 16 / 9; max-width: 100%; }
+.card .body { padding: 22px 24px 26px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.card h3 { font: 900 32px/1 var(--display); text-transform: uppercase; margin: 0; }
+.card p { color: var(--muted); margin: 0; flex: 1; }
+.links { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
+.links a { font: 600 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); text-decoration: none; }
+.links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* About */
+.about { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 6vw, 72px); align-items: start; }
+.about .story p { margin: 0 0 1em; max-width: 36em; }
+.about .story p:first-child { font-size: 21px; color: var(--text); }
+.about .story p + p { color: var(--muted); }
+.team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.member { display: flex; flex-direction: column; gap: 12px; }
+.avatar {
+  aspect-ratio: 1; max-width: 100%; border-radius: 6px; display: grid; place-items: center;
+  font: 900 44px/1 var(--display); color: var(--text); border: 1px solid var(--line);
+  background: linear-gradient(145deg, var(--panel), #221c3d);
+  text-shadow: -2px 0 var(--magenta), 2px 0 var(--cyan);
+}
+.member h3 { font: 700 22px/1.1 var(--display); text-transform: uppercase; margin: 0; letter-spacing: .02em; }
+.member p { font: 400 12px/1.4 var(--mono); color: var(--muted); margin: 4px 0 0; text-transform: uppercase; letter-spacing: .08em; }
+
+/* Contact & press */
+.contact { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; }
+.panel { border: 1px solid var(--line); border-radius: 6px; padding: clamp(24px, 4vw, 36px); background: var(--panel); min-width: 0; }
+.panel h3 { font: 600 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--cyan); margin: 0 0 18px; }
+.email-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.email { font: 700 clamp(26px, 4vw, 40px)/1.1 var(--display); letter-spacing: .01em; word-break: break-all; user-select: all; }
+.copy {
+  font: 600 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; cursor: pointer;
+  background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px;
+}
+.copy:hover { border-color: var(--muted); }
+.socials { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
+.socials a { font: 600 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; padding: 12px 14px; border: 1px solid var(--line); border-radius: 4px; }
+.socials a:hover { border-color: var(--magenta); color: var(--magenta); }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 12px 20px; margin: 0; font-size: 15px; }
+.facts dt { font: 600 12px/1.6 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; }
+.press-note { color: var(--muted); font-size: 14px; margin: 20px 0 0; }
+
+footer .wrap { padding-block: 32px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--line); font: 400 12px/1.5 var(--mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+
+@media (max-width: 860px) {
+  .feature, .about, .contact { grid-template-columns: 1fr; }
+  .feature .art { min-height: 220px; }
+}
+@media (max-width: 620px) {
+  .grid { grid-template-columns: 1fr; }
+  .team { grid-template-columns: 1fr 1fr; }
+  .logo span { display: none; }
+  nav a { padding: 8px 8px; letter-spacing: .08em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<header class="top band">
+  <div class="wrap">
+    <a class="logo" href="#home"><b>J3</b><span>Interactive</span></a>
+    <nav aria-label="Main">
+      <a href="#games">Games</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section class="hero band" id="home">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="eyebrow">Independent game studio</div>
+      <h1 class="mark" aria-label="J3 Interactive">J3</h1>
+      <p class="word" aria-hidden="true">Interactive</p>
+      <p class="lede">We build fast, loud, hand-crafted games for players who like a challenge. Small team, big ideas, no filler.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#games">See our games</a>
+        <a class="btn" href="#contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAMES -->
+  <section class="block band" id="games">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Games</div>
+          <h2>What we're making</h2>
+        </div>
+        <p>From our first release to the projects still on the workbench.</p>
+      </div>
+
+      <!-- Featured game: replace the title, text, details and links with your own -->
+      <article class="feature">
+        <div class="art art-ember" role="img" aria-label="Cover art for Ember Run"></div>
+        <div class="info">
+          <div class="status"><span class="chip dev">In development</span><span class="chip">Featured</span></div>
+          <h3>Ember Run</h3>
+          <p>A high-speed action runner through a burning neon city. Dodge, dash and chain combos to outrun the blaze before the timer hits zero.</p>
+          <dl class="specs">
+            <dt>Genre</dt><dd>Action / Runner</dd>
+            <dt>Platforms</dt><dd>PC, Mobile</dd>
+            <dt>Release</dt><dd>Coming 2027</dd>
+          </dl>
+          <div class="links">
+            <a href="#" target="_blank" rel="noopener">Wishlist on Steam</a>
+            <a href="#" target="_blank" rel="noopener">Watch trailer</a>
+          </div>
+        </div>
+      </article>
+
+      <div class="grid">
+        <article class="card">
+          <div class="art art-drift" role="img" aria-label="Cover art for Neon Drift"></div>
+          <div class="body">
+            <div class="status"><span class="chip live">Out now</span><span class="chip">PC</span><span class="chip">Web</span></div>
+            <h3>Neon Drift</h3>
+            <p>An arcade racer built around one perfect mechanic: the drift. Short tracks, global leaderboards, endless retries.</p>
+            <div class="links">
+              <a href="#" target="_blank" rel="noopener">Play on itch.io</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="art art-block" role="img" aria-label="Cover art for Stack Shift"></div>
+          <div class="body">
+            <div class="status"><span class="chip">Prototype</span><span class="chip">Mobile</span></div>
+            <h3>Stack Shift</h3>
+            <p>A puzzle game about bending gravity to slot falling blocks into place. Easy to pick up, hard to put down.</p>
+            <div class="links">
+              <a href="#contact">Join the playtest</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / TEAM -->
+  <section class="block band" id="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">About</div>
+          <h2>The studio</h2>
+        </div>
+      </div>
+      <div class="about">
+        <div class="story">
+          <p>J3 Interactive is a small independent studio that makes games we'd want to play ourselves.</p>
+          <p>We focus on tight controls, bold visuals and short sessions that keep you coming back for one more run. Every game starts as a quick prototype and only gets built out if it's genuinely fun.</p>
+          <p>We're always happy to hear from players, publishers, press and anyone who wants to collaborate.</p>
+        </div>
+        <!-- Team: replace names and roles; add or remove .member blocks as needed -->
+        <div class="team">
+          <div class="member">
+            <div class="avatar" aria-hidden="true">J</div>
+            <div><h3>Your Name</h3><p>Founder &amp; Director</p></div>
+          </div>
+          <div class="member">
+            <div class="avatar" aria-hidden="true">P</div>
+            <div><h3>Team Member</h3><p>Lead Programmer</p></div>
+          </div>
+          <div class="member">
+            <div class="avatar" aria-hidden="true">A</div>
+            <div><h3>Team Member</h3><p>Art &amp; Animation</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT / PRESS -->
+  <section class="block band" id="contact">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Contact &amp; Press</div>
+          <h2>Say hello</h2>
+        </div>
+        <p>Business, press, playtests or just feedback. We read everything.</p>
+      </div>
+      <div class="contact">
+        <div class="panel">
+          <h3>Email</h3>
+          <div class="email-row">
+            <!-- Replace with your real email address -->
+            <span class="email" id="email">hello@j3interactive.com</span>
+            <button class="copy" id="copy-btn" type="button">Copy</button>
+          </div>
+          <div class="socials">
+            <a href="#" target="_blank" rel="noopener">X / Twitter</a>
+            <a href="#" target="_blank" rel="noopener">YouTube</a>
+            <a href="#" target="_blank" rel="noopener">Discord</a>
+            <a href="#" target="_blank" rel="noopener">itch.io</a>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Press fact sheet</h3>
+          <dl class="facts">
+            <dt>Studio</dt><dd>J3 Interactive</dd>
+            <dt>Founded</dt><dd>2026</dd>
+            <dt>Based in</dt><dd>United States</dd>
+            <dt>Team size</dt><dd>3</dd>
+            <dt>Platforms</dt><dd>PC, Web, Mobile</dd>
+            <dt>Press contact</dt><dd>hello@j3interactive.com</dd>
+          </dl>
+          <p class="press-note">Need logos, screenshots or review keys? Email us and we'll send a press kit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="band">
+  <div class="wrap">
+    <span>© <span id="year">2026</span> J3 Interactive</span>
+    <span>Made with too much coffee</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const btn = document.getElementById('copy-btn');
+  btn.addEventListener('click', () => {
+    const text = document.getElementById('email').textContent.trim();
+    const done = () => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy', 1600); };
+    const fallback = () => {
+      const r = document.createRange(); r.selectNodeContents(document.getElementById('email'));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Selected';  setTimeout(() => btn.textContent = 'Copy', 1600);
+    };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+</script>
+</body>
+</html>
